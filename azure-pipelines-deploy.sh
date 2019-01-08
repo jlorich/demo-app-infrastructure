@@ -1,7 +1,7 @@
 # Initialize the local environment
 terraform init \
     -backend-config="access_key=$(storage-access-key)" \
-    -backend-config "storage_account_name=$(storage-account-name)" \
+    -backend-config="storage_account_name=$(storage-account-name)" \
     -input=false 
 
 # Select the appropriate workspace
