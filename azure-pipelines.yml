@@ -1,0 +1,46 @@
+trigger:
+  branches:
+    include: 
+    - master
+
+pr:
+- master
+
+pool:
+  vmImage: 'Ubuntu-16.04'
+
+steps:
+
+# Verify template and generate terraform plan
+- script: |
+    # Configure values for authentication
+    export ARM_SUBSCRIPTION_ID=$(arm-subscription-id)
+    export ARM_CLIENT_ID=$(arm-client-id)
+    export ARM_CLIENT_SECRET=$(arm-client-secret)
+    export ARM_TENANT_ID=$(arm-tenant-id)
+
+    # Set PWD to the terraform folder
+    cd terraform
+
+    # Initialize terraform and check the file format
+    terraform init -input=false \
+        -backend-config="access_key=$(storage-access-key)" \
+        -backend-config "storage_account_name=$(storage-account-name)"
+
+    terraform workspace select $(environment)
+    
+    terraform fmt -check=true
+
+  displayName: Verify template
+
+# Copy Terraform files to the staging directory
+- task: CopyFiles@2
+  inputs:
+    sourceFolder: $(Build.SourcesDirectory)
+    contents: |
+      **/*
+      !.terraform/**/*
+    targetFolder: $(Build.ArtifactStagingDirectory)
+
+  # Publish build artifacts
+- task: PublishBuildArtifacts@1
