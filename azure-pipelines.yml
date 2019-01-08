@@ -25,6 +25,7 @@ steps:
     contents: |
       **/*
       !.terraform/**/*
+      !.git/**/*
     targetFolder: $(Build.ArtifactStagingDirectory)
 
   # Publish build artifacts
