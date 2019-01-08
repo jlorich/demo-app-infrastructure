@@ -13,7 +13,7 @@ module "app_service_plan" {
   environment = "${var.environment}"
 }
 
-module "app_service" {
+module "java_app_service" {
   source                  = "./modules/app-service-java"
   app_service_plan_id     = "${module.app_service_plan.id}"
   name                    = "demo-java-app-service"
@@ -21,7 +21,7 @@ module "app_service" {
   app_service_name_prefix = "${var.prefix}"
 }
 
-module "app_service" {
+module "aspnetcore_app_service" {
   source                  = "./modules/app-service-aspnetcore"
   app_service_plan_id     = "${module.app_service_plan.id}"
   name                    = "demo-aspnetcore-app-service"
